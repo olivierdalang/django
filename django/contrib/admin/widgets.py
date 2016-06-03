@@ -295,11 +295,11 @@ class RelatedFieldWidgetWrapper(forms.Widget):
             'url_params': url_params,
             'model': rel_opts.verbose_name,
         }
-        if self.can_view_related :
+        if self.can_view_related:
             context.update(
                 can_view_related=True,
             )
-        if self.can_change_related :
+        if self.can_change_related:
             context.update(
                 can_change_related=True,
             )

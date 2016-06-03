@@ -318,7 +318,7 @@ class BaseModelAdmin(six.with_metaclass(forms.MediaDefiningClass)):
         elif self.fieldsets:
             return flatten_fieldsets(self.get_fieldsets(request, obj))
         return [field.name for field in self.opts.local_fields] + \
-                [field.name for field in self.opts.local_many_to_many]
+               [field.name for field in self.opts.local_many_to_many]
 
     def get_prepopulated_fields(self, request, obj=None):
         """
