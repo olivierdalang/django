@@ -1349,10 +1349,11 @@ class ModelAdmin(BaseModelAdmin):
             readonly = list(inline.get_readonly_fields(request, obj))
             uneditable = list(inline.get_uneditable_fields(request, obj))
             has_add_permission = inline.has_add_permission(request)
+            has_change_permission = inline.has_change_permission(request)
             prepopulated = dict(inline.get_prepopulated_fields(request, obj))
             inline_admin_formset = helpers.InlineAdminFormSet(inline, formset,
                 fieldsets, prepopulated, readonly, uneditable, has_add_permission,
-                model_admin=self)
+                has_change_permission, model_admin=self)
             inline_admin_formsets.append(inline_admin_formset)
         return inline_admin_formsets
 
