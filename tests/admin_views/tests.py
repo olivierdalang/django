@@ -2141,7 +2141,7 @@ class AdminViewPermissionsTest(TestCase):
         response = self.client.post(reverse('admin:admin_views_article_add'), post_data, follow=True)
         self.assertContains(
             response,
-            '<li class="success">The article "Fun &amp; games" was added successfully.</li>',
+            '<li class="success">The article &quot;Fun &amp; games&quot; was added successfully.</li>'
             html=True
         )
 
