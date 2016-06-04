@@ -315,10 +315,9 @@ class BaseModelAdmin(six.with_metaclass(forms.MediaDefiningClass)):
         if hasattr(request, 'user') and (
                 self.has_change_permission(request, obj) or (self.has_add_permission(request) and not obj)):
             return self.get_readonly_fields(request, obj)
-        elif hasattr(self, 'declared_fieldsets') and self.declared_fieldsets:
-            return flatten_fieldsets(self.declared_fieldsets)
-        else:
-            return [field.name for field in self.opts.local_fields] + \
+        elif self.fieldsets:
+            return flatten_fieldsets(self.get_fieldsets(request, obj))
+        return [field.name for field in self.opts.local_fields] + \
                 [field.name for field in self.opts.local_many_to_many]
 
     def get_prepopulated_fields(self, request, obj=None):
