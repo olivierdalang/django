@@ -158,6 +158,7 @@ class BaseModelAdmin(six.with_metaclass(forms.MediaDefiningClass)):
                         can_add_related=related_modeladmin.has_add_permission(request),
                         can_change_related=related_modeladmin.has_change_permission(request),
                         can_delete_related=related_modeladmin.has_delete_permission(request),
+                        can_view_related=related_modeladmin.has_view_permission(request),
                     )
                 formfield.widget = widgets.RelatedFieldWidgetWrapper(
                     formfield.widget, db_field.remote_field, self.admin_site, **wrapper_kwargs

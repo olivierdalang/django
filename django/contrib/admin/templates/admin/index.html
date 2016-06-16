@@ -34,7 +34,11 @@
             {% endif %}
 
             {% if model.admin_url %}
+                {% if model.view_only %}
+                <td><a href="{{ model.admin_url }}" class="viewlink">{% trans 'View' %}</a></td>
+                {% else %}
                 <td><a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a></td>
+                {% endif %}
             {% else %}
                 <td>&nbsp;</td>
             {% endif %}

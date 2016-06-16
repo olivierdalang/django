@@ -68,7 +68,7 @@
 
     function updateRelatedObjectLinks(triggeringLink) {
         var $this = django.jQuery(triggeringLink);
-        var siblings = $this.nextAll('.change-related, .delete-related');
+        var siblings = $this.nextAll('.view-related, .change-related, .delete-related');
         if (!siblings.length) {
             return;
         }

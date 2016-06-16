@@ -239,7 +239,8 @@ class RelatedFieldWidgetWrapper(forms.Widget):
     template = 'admin/related_widget_wrapper.html'
 
     def __init__(self, widget, rel, admin_site, can_add_related=None,
-                 can_change_related=False, can_delete_related=False):
+                 can_change_related=False, can_delete_related=False,
+                 can_view_related=False):
         self.needs_multipart_form = widget.needs_multipart_form
         self.attrs = widget.attrs
         self.choices = widget.choices
@@ -253,6 +254,7 @@ class RelatedFieldWidgetWrapper(forms.Widget):
         # XXX: The UX does not support multiple selected values.
         multiple = getattr(widget, 'allow_multiple_selected', False)
         self.can_change_related = not multiple and can_change_related
+        self.can_view_related = not multiple and can_view_related
         # XXX: The deletion UX can be confusing when dealing with cascading deletion.
         cascade = getattr(rel, 'on_delete', None) is CASCADE
         self.can_delete_related = not multiple and not cascade and can_delete_related
@@ -293,10 +295,17 @@ class RelatedFieldWidgetWrapper(forms.Widget):
             'url_params': url_params,
             'model': rel_opts.verbose_name,
         }
-        if self.can_change_related:
-            change_related_template_url = self.get_related_url(info, 'change', '__fk__')
+        if self.can_view_related :
+            context.update(
+                can_view_related=True,
+            )
+        if self.can_change_related :
             context.update(
                 can_change_related=True,
+            )
+        if self.can_change_related or self.can_view_related:
+            change_related_template_url = self.get_related_url(info, 'change', '__fk__')
+            context.update(
                 change_related_template_url=change_related_template_url,
             )
         if self.can_add_related:
