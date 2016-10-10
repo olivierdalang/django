@@ -5,6 +5,7 @@ Testing of admin inline formsets.
 from __future__ import unicode_literals
 
 import random
+import uuid
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -61,6 +62,11 @@ class NonAutoPKBook(models.Model):
             if not NonAutoPKBook.objects.filter(rand_pk=test_pk).exists():
                 self.rand_pk = test_pk
         super(NonAutoPKBook, self).save(*args, **kwargs)
+        
+
+# Models for #15665
+class NonAutoPKBookSubclass(NonAutoPKBook):
+    pass
 
 
 class EditablePKBook(models.Model):
@@ -174,6 +180,7 @@ class FootNote(models.Model):
     chapter = models.ForeignKey(Chapter, models.PROTECT)
     note = models.CharField(max_length=40)
 
+
 # Models for #16838
 
 
@@ -251,6 +258,8 @@ class SomeChildModel(models.Model):
     name = models.CharField(max_length=1)
     position = models.PositiveIntegerField()
     parent = models.ForeignKey(SomeParentModel, models.CASCADE)
+
+
 
 # Other models
 

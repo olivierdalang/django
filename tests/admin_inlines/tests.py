@@ -905,6 +905,47 @@ class SeleniumFirefoxTests(AdminSeleniumWebDriverTestCase):
             self.assertFalse(self.selenium.find_element_by_id(field_name).is_displayed())
 
 
+
+    def test_non_autofield_primary_key(self):
+        """
+        Test for #15665 where inline wouldn't work if using non-AutoField ids and inherinting the model
+        """
+        self.admin_login(username='super', password='secret')
+        self.selenium.get(self.live_server_url + reverse('admin:admin_author_add'))
+
+        # Enter some data and click 'Save'
+        self.selenium.find_element_by_name('name').send_keys('author')
+        self.selenium.find_element_by_name('nonautopkbooksubclass_set-0-title').send_keys('t1')
+        self.selenium.find_element_by_name('nonautopkbooksubclass_set-1-title').send_keys('t2')
+        self.selenium.find_element_by_name('nonautopkbooksubclass_set-2-title').send_keys('t3')
+
+        self.selenium.find_element_by_xpath('//input[@value="Save"]').click()
+        self.wait_page_loaded()
+
+        # Check that the objects have been created in the database
+        self.assertEqual(Author.objects.filter(name='author').count(), 1)
+        self.assertEqual(NonAutoPKBookSubclass.objects.filter(title='t1').count(), 1)
+        self.assertEqual(NonAutoPKBookSubclass.objects.filter(title='t2').count(), 1)
+        self.assertEqual(NonAutoPKBookSubclass.objects.filter(title='t3').count(), 1)
+
+        # Enter some more data and click 'Save'
+        self.selenium.find_element_by_name('nonautopkbooksubclass_set-3-title').send_keys('t4')
+        self.selenium.find_element_by_name('nonautopkbooksubclass_set-4-title').send_keys('t5')
+        self.selenium.find_element_by_name('nonautopkbooksubclass_set-5-title').send_keys('t6')
+
+        self.selenium.find_element_by_xpath('//input[@value="Save"]').click()
+        self.wait_page_loaded()
+
+        # Check that the objects have been created in the database
+        self.assertEqual(Author.objects.filter(name='author').count(), 1)
+        self.assertEqual(NonAutoPKBookSubclass.objects.filter(title='t1').count(), 1)
+        self.assertEqual(NonAutoPKBookSubclass.objects.filter(title='t2').count(), 1)
+        self.assertEqual(NonAutoPKBookSubclass.objects.filter(title='t3').count(), 1)
+        self.assertEqual(NonAutoPKBookSubclass.objects.filter(title='t4').count(), 1)
+        self.assertEqual(NonAutoPKBookSubclass.objects.filter(title='t5').count(), 1)
+        self.assertEqual(NonAutoPKBookSubclass.objects.filter(title='t6').count(), 1)
+
+
 class SeleniumChromeTests(SeleniumFirefoxTests):
     webdriver_class = 'selenium.webdriver.chrome.webdriver.WebDriver'
 

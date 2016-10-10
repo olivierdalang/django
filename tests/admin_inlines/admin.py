@@ -3,9 +3,9 @@ from django.contrib import admin
 
 from .models import (
     Author, BinaryTree, CapoFamiglia, Chapter, ChildModel1, ChildModel2,
-    Consigliere, EditablePKBook, ExtraTerrestrial, Fashionista, Holder,
+    Consigliere, EditablePKBook, NonAutoPKBook, ExtraTerrestrial, Fashionista, Holder,
     Holder2, Holder3, Holder4, Inner, Inner2, Inner3, Inner4Stacked,
-    Inner4Tabular, NonAutoPKBook, Novel, ParentModelWithCustomPk, Poll,
+    Inner4Tabular, NonAutoPKBookSubclass, Novel, ParentModelWithCustomPk, Poll,
     Profile, ProfileCollection, Question, ReadOnlyInline, ShoppingWeakness,
     Sighting, SomeChildModel, SomeParentModel, SottoCapo, Title,
     TitleCollection,
@@ -28,6 +28,11 @@ class NonAutoPKBookStackedInline(admin.StackedInline):
     classes = ('collapse',)
 
 
+class NonAutoPKBookSubclassStackedInline(admin.StackedInline):
+    model = NonAutoPKBookSubclass
+    classes = ('collapse',)
+
+
 class EditablePKBookTabularInline(admin.TabularInline):
     model = EditablePKBook
 
@@ -39,7 +44,7 @@ class EditablePKBookStackedInline(admin.StackedInline):
 class AuthorAdmin(admin.ModelAdmin):
     inlines = [BookInline,
         NonAutoPKBookTabularInline, NonAutoPKBookStackedInline,
-        EditablePKBookTabularInline, EditablePKBookStackedInline]
+        EditablePKBookTabularInline, EditablePKBookStackedInline, NonAutoPKBookSubclassStackedInline]
 
 
 class InnerInline(admin.StackedInline):
@@ -147,7 +152,6 @@ class SottoCapoInline(admin.TabularInline):
 class ProfileInline(admin.TabularInline):
     model = Profile
     extra = 1
-
 
 # admin for #18433
 class ChildModel1Inline(admin.TabularInline):
