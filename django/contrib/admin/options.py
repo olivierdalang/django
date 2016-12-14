@@ -1063,6 +1063,7 @@ class ModelAdmin(BaseModelAdmin):
             'has_view_permission': self.has_view_permission(request, obj),
             'has_delete_permission': self.has_delete_permission(request, obj),
             'has_inline_admin_formsets': context['inline_admin_formsets'] != [],
+            'has_editable_inline_admin_formsets': any([i.has_add_permission or i.has_change_permission or i.has_delete_permission for i in context['inline_admin_formsets']]),
             'has_file_field': True,  # FIXME - this should check if form or formsets have a FileField,
             'has_absolute_url': view_on_site_url is not None,
             'absolute_url': view_on_site_url,
@@ -1350,11 +1351,12 @@ class ModelAdmin(BaseModelAdmin):
             readonly = list(inline.get_readonly_fields(request, obj))
             uneditable = list(inline.get_uneditable_fields(request, obj))
             has_add_permission = inline.has_add_permission(request)
-            has_change_permission = inline.has_change_permission(request)
+            has_change_permission = inline.has_change_permission(request, obj)
+            has_delete_permission = inline.has_delete_permission(request, obj)
             prepopulated = dict(inline.get_prepopulated_fields(request, obj))
             inline_admin_formset = helpers.InlineAdminFormSet(inline, formset,
                 fieldsets, prepopulated, readonly, uneditable, has_add_permission,
-                has_change_permission, model_admin=self)
+                has_change_permission, has_delete_permission, model_admin=self)
             inline_admin_formsets.append(inline_admin_formset)
         return inline_admin_formsets
 

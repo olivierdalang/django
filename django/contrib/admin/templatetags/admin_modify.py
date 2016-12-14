@@ -36,7 +36,8 @@ def submit_row(context):
     has_change_permission = context['has_change_permission']
     has_add_permission = context['has_add_permission']
     has_inline_admin_formsets = context['has_inline_admin_formsets']
-    can_save = (has_change_permission and change) or (has_add_permission and add) or has_inline_admin_formsets
+    has_editable_inline_admin_formsets = context['has_editable_inline_admin_formsets']
+    can_save = (has_change_permission and change) or (has_add_permission and add) or has_editable_inline_admin_formsets
     ctx = {
         'opts': opts,
         'show_delete_link': (

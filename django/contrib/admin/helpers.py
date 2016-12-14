@@ -229,7 +229,7 @@ class InlineAdminFormSet(object):
     """
     def __init__(self, inline, formset, fieldsets, prepopulated_fields=None,
             readonly_fields=None, uneditable_fields=None, has_add_permission=True,
-            has_change_permission=True, model_admin=None):
+            has_change_permission=True, has_delete_permission=True, model_admin=None):
         self.opts = inline
         self.formset = formset
         self.fieldsets = fieldsets
@@ -245,6 +245,7 @@ class InlineAdminFormSet(object):
         self.prepopulated_fields = prepopulated_fields
         self.has_add_permission = has_add_permission
         self.has_change_permission = has_change_permission
+        self.has_delete_permission = has_delete_permission
         self.classes = ' '.join(inline.classes) if inline.classes else ''
 
     def __iter__(self):
