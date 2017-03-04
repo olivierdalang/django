@@ -1880,9 +1880,9 @@ class InlineModelAdmin(BaseModelAdmin):
             class DeleteProtectedModelForm(base_model_form):
                 def __init__(self, *args, **kwargs):
                     super(DeleteProtectedModelForm, self).__init__(*args, **kwargs)
-                    if not can_change and self.instance.id:
+                    if not can_change and not self.instance._state.adding:
                         self.fields = {}
-                    if not can_add and not self.instance.id:
+                    if not can_add and self.instance._state.adding:
                         self.fields = {}
 
                 def hand_clean_DELETE(self):
@@ -1894,7 +1894,7 @@ class InlineModelAdmin(BaseModelAdmin):
                     if self.cleaned_data.get(DELETION_FIELD_NAME, False):
                         using = router.db_for_write(self._meta.model)
                         collector = NestedObjects(using=using)
-                        if self.instance.pk is None:
+                        if self.instance._state.adding:
                             return
                         collector.collect([self.instance])
                         if collector.protected:
