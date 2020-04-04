@@ -10,8 +10,8 @@
                     };
                 }
             },
-            templateResult: function(data) {return data.safe?$(data.text):data.text;},
-            templateSelection: function(data) {return data.safe?$(data.text):data.text;}
+            templateResult: function(data) {return data.safe?$('div').html(data.text):data.text;},
+            templateSelection: function(data) {return data.safe?$('div').html(data.text):data.text;}
         }, options);
         $element.select2(settings);
     };
