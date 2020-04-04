@@ -1,6 +1,6 @@
 from django.http import Http404, JsonResponse
 from django.views.generic.list import BaseListView
-django.utils.safestring import SafeBytes
+from django.utils.safestring import SafeBytes
 
 
 class AutocompleteJsonView(BaseListView):
