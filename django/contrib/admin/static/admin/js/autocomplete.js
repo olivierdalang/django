@@ -9,7 +9,9 @@
                         page: params.page
                     };
                 }
-            }
+            },
+            templateResult: function(data) {return data.safe?$('<div>').html(data.text):data.text;},
+            templateSelection: function(data) {return data.safe?$('<div>').html(data.text):data.text;}
         }, options);
         $element.select2(settings);
     };
