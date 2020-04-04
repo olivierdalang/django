@@ -1,5 +1,6 @@
 from django.http import Http404, JsonResponse
 from django.views.generic.list import BaseListView
+django.utils.safestring import SafeBytes
 
 
 class AutocompleteJsonView(BaseListView):
@@ -11,9 +12,10 @@ class AutocompleteJsonView(BaseListView):
         """
         Return a JsonResponse with search results of the form:
         {
-            results: [{id: "123" text: "foo"}],
+            results: [{id: "123", text: "foo", safe: true}],
             pagination: {more: true}
         }
+        If safe is true, the HTML won't be escaped.
         """
         if not self.model_admin.get_search_fields(request):
             raise Http404(
@@ -28,7 +30,7 @@ class AutocompleteJsonView(BaseListView):
         context = self.get_context_data()
         return JsonResponse({
             'results': [
-                {'id': str(obj.pk), 'text': str(obj)}
+                {'id': str(obj.pk), 'text': str(obj), 'safe': isinstance(obj, SafeBytes)}
                 for obj in context['object_list']
             ],
             'pagination': {'more': context['page_obj'].has_next()},
