@@ -42,7 +42,7 @@ from django.http.response import HttpResponseBase
 from django.template.response import SimpleTemplateResponse, TemplateResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.utils.html import format_html
+from django.utils.html import format_html, conditional_escape
 from django.utils.http import urlencode
 from django.utils.safestring import mark_safe
 from django.utils.text import capfirst, format_lazy, get_text_list
@@ -542,7 +542,7 @@ class BaseModelAdmin(metaclass=forms.MediaDefiningClass):
 class ModelAdmin(BaseModelAdmin):
     """Encapsulate all admin options and functionality for a given model."""
 
-    list_display = ('__str__',)
+    list_display = (lambda o: conditional_escape(o),)
     list_display_links = ()
     list_filter = ()
     list_select_related = False
