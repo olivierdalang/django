@@ -37,9 +37,24 @@ def stringfilter(func):
     Decorator for filters which should only receive strings. The object
     passed as the first positional argument will be converted to a string.
     """
+    return _stringfilter(func, allow_html=False)
+
+
+def htmlstringfilter(func):
+    """
+    Decorator for filters which should only receive strings or html string.
+    The object passed as the first positional argument will be escaped.
+    """
+    return _stringfilter(func, allow_html=True)
+
+
+def _stringfilter(func, allow_html):
     def _dec(*args, **kwargs):
         args = list(args)
-        args[0] = str(args[0])
+        if allow_html:
+            args[0] = conditional_escape(args[0])
+        else:
+            args[0] = str(args[0])
         if (isinstance(args[0], SafeData) and
                 getattr(_dec._decorated_function, 'is_safe', False)):
             return mark_safe(func(*args, **kwargs))
@@ -256,7 +271,7 @@ def truncatechars(value, arg):
 
 
 @register.filter(is_safe=True)
-@stringfilter
+@htmlstringfilter
 def truncatechars_html(value, arg):
     """
     Truncate HTML after `arg` number of chars.
@@ -284,7 +299,7 @@ def truncatewords(value, arg):
 
 
 @register.filter(is_safe=True)
-@stringfilter
+@htmlstringfilter
 def truncatewords_html(value, arg):
     """
     Truncate HTML after `arg` number of words.
