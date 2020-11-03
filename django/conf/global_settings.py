@@ -21,6 +21,10 @@ DEBUG = False
 # on a live site.
 DEBUG_PROPAGATE_EXCEPTIONS = False
 
+# Whether the normal 404 view should be used when DEBUG is True. This can be useful
+# to test or debug the 404 view itself.
+DEBUG_DISABLE_404_VIEW = False
+
 # People who get code error notifications.
 # In the format [('Full Name', 'email@example.com'), ('Full Name', 'anotheremail@example.com')]
 ADMINS = []
